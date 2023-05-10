@@ -21,3 +21,32 @@ subjects:
   - apiGroup: ""
     kind: ServiceAccount
     name: porkbun-webhook
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: porkbun-webhook-list-prioritylevelconfigurations
+rules:
+- apiGroups:
+  - flowcontrol.apiserver.k8s.io
+  resources:
+  - prioritylevelconfigurations
+  - flowschemas
+  verbs:
+  - get
+  - list
+  - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: porkbun-webhook-list-prioritylevelconfigurations
+subjects:
+- kind: ServiceAccount
+  name: porkbun-webhook
+  namespace: cert-manager
+roleRef:
+  kind: ClusterRole
+  name: porkbun-webhook-list-prioritylevelconfigurations
+  apiGroup: rbac.authorization.k8s.io
+
